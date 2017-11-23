@@ -1,4 +1,4 @@
-Alloy has a preview shader designed to work with Allegorithmic's Substance Designer tool to provide a mostly accurate preview of how the resulting material set will look in Unity 5 using Alloy.
+Alloy has a preview shader designed to work with Allegorithmic's Substance Designer tool to provide a mostly accurate preview of how the resulting material set will look in Unity using Alloy.
 
 ### Usage
 
