@@ -1,7 +1,3 @@
-// Alloy Physical Shader Framework
-// Copyright 2013-2017 RUST LLC.
-// http://www.alloy.rustltd.com/
-
 //////////////////////////////// Fragment shader
 #version 120
 #extension GL_ARB_shader_texture_lod : require

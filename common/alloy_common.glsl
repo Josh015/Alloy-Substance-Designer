@@ -1,7 +1,3 @@
-// Alloy Physical Shader Framework
-// Copyright 2013-2017 RUST LLC.
-// http://www.alloy.rustltd.com/
-
 #define M_PI 3.1415926535897932384626433832795
 
 #define DISTANCE_ATTENUATION_MULT 0.001

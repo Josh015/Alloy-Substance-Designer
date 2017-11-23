@@ -1,7 +1,3 @@
-// Alloy Physical Shader Framework
-// Copyright 2013-2017 RUST LLC.
-// http://www.alloy.rustltd.com/
-
 #define M_INV_PI 0.31830988618379067153776752674503
 #define M_INV_LOG2 1.4426950408889634073599246810019
 
