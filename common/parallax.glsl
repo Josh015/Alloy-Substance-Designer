@@ -55,6 +55,6 @@ vec2 updateUV(
 		float d = ray_intersect_rm(heightmap,uv,ds);
 		return uv+ds*d;
 	}
-	else return uv*tiling;
+	else return uv*tiling*uvScale;
 }
 

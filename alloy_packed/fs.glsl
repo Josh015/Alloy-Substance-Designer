@@ -46,13 +46,6 @@ uniform mat4 viewInverseMatrix;
 // Number of miplevels in the envmap
 uniform float maxLod = 12.0;
 
-// Sample Pos table
-uniform sampler2D vanDerCorputMap;
-// Sample table Texture Width
-// See cTextureWidth contant in samplespostableloader.cpp
-const int vanDerCorputMapWidth = 256;
-const int vanDerCorputMapHeight = 4;
-
 // Actual number of samples in the table
 uniform int nbSamples = 16;
 
@@ -159,7 +152,7 @@ void main()
 	// Image based lighting contribution
 	vec3 contribE = computeIBL(
 		environmentMap, envRotation, maxLod,
-		vanDerCorputMap, vanDerCorputMapWidth, vanDerCorputMapHeight, nbSamples,
+		nbSamples,
 		normalWS, fixedNormalWS, tangentWS, binormalWS,
 		pointToCameraDirWS,
 		diffColor, specColor, roughness,
@@ -173,5 +166,5 @@ void main()
 	vec3 finalColor = contrib0 + contrib1 + contribE + emissiveContrib;
 
 	// Final Color
-	gl_FragColor = vec4(linear_to_gamma3(finalColor), texture2D(opacityMap,uv).r);
+	gl_FragColor = vec4(finalColor, texture2D(opacityMap,uv).r);
 }

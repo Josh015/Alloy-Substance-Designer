@@ -1,5 +1,6 @@
 #define M_INV_PI 0.31830988618379067153776752674503
 #define M_INV_LOG2 1.4426950408889634073599246810019
+#define M_GOLDEN_RATIO 0.618034
 
 float specular_occlusion(
   float ao,
@@ -228,49 +229,25 @@ void computeSamplingFrame(
 		- Tp*dot(iFS_Binormal, Tp));
 }
 
-
-//- Return the i*th* number from the Van Der Corput sequence.
-float VanDerCorput(
-	sampler2D vanDerCorputMap, 
-	int i, 
-	int vanDerCorputMapWidth,
-	int vanDerCorputMapHeight,
-	int nbSamples)
-{
-  float xInVanDerCorputTex = (float(i)+0.5) / vanDerCorputMapWidth;
-  float yInVanDerCorputTex = 0.5 / vanDerCorputMapHeight; // First row pixel
-  return texture2D(vanDerCorputMap, vec2(xInVanDerCorputTex, yInVanDerCorputTex)).x;
-}
-
-//- Return the i*th* couple from the hammerlsey sequence.
-//- nbSample is required to get an uniform distribution. nbSample has to be less than 1024.
-vec2 hammersley2D(
-	sampler2D vanDerCorputMap, 
-	int i, 
-	int vanDerCorputMapWidth,
-	int vanDerCorputMapHeight,
-	int nbSamples)
+vec2 fibonacci2D(int i, int nbSample)
 {
   return vec2(
-		(float(i)+0.5) / float(nbSamples),
-		VanDerCorput(vanDerCorputMap, i, vanDerCorputMapWidth, vanDerCorputMapHeight, nbSamples)
-		);
+		float(i+1) * M_GOLDEN_RATIO,
+		(float(i)+0.5) / float(nbSamples)
+	);
 }
 
-vec3 IBLSpecularContributionQMC(
-	sampler2D environmentMap, 
-	float envRotation, 
+vec3 IBLSpecularContribution(
+	sampler2D environmentMap,
+	float envRotation,
 	float maxLod,
-	sampler2D vanDerCorputMap, 
-	int vanDerCorputMapWidth,
-	int vanDerCorputMapHeight,
 	int nbSamples,
 	vec3 normalWS,
-	vec3 fixedNormalWS, 
-	vec3 Tp, 
+	vec3 fixedNormalWS,
+	vec3 Tp,
 	vec3 Bp,
 	vec3 pointToCameraDirWS,
-	vec3 specColor, 
+	vec3 specColor,
 	float roughness)
 {
 	vec3 sum = vec3(0.0,0.0,0.0);
@@ -279,7 +256,7 @@ vec3 IBLSpecularContributionQMC(
 
 	for(int i=0; i<nbSamples; ++i)
 	{
-		vec2 Xi = hammersley2D(vanDerCorputMap, i, vanDerCorputMapWidth, vanDerCorputMapHeight, nbSamples);
+		vec2 Xi = fibonacci2D(i, nbSamples);
 		vec3 Hn = importanceSampleGGX(Xi,Tp,Bp,fixedNormalWS,roughness);
 		vec3 Ln = -reflect(pointToCameraDirWS,Hn);
 
@@ -314,9 +291,6 @@ vec3 computeIBL(
 	sampler2D environmentMap,
 	float envRotation, 
 	float maxLod,
-	sampler2D vanDerCorputMap, 
-	int vanDerCorputMapWidth,
-	int vanDerCorputMapHeight,
 	int nbSamples,
 	vec3 normalWS,
 	vec3 fixedNormalWS, 
@@ -332,13 +306,10 @@ vec3 computeIBL(
 	vec3 Tp,Bp;
 	computeSamplingFrame(iFS_Tangent, iFS_Binormal, fixedNormalWS, Tp, Bp);
 
-	vec3 specularE = IBLSpecularContributionQMC(
+	vec3 specularE = IBLSpecularContribution(
 		environmentMap, 
 		envRotation, 
 		maxLod,
-		vanDerCorputMap,
-		vanDerCorputMapWidth,
-		vanDerCorputMapHeight,
 		nbSamples,
 		normalWS,
 		fixedNormalWS, 

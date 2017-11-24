@@ -93,7 +93,6 @@
     <sampler name="specularLevel"       usage="specularlevel,specularity"/>
     <sampler name="opacityMap"          usage="opacity"/>
     <sampler name="environmentMap"      usage="panorama"/>
-    <sampler name="vanDerCorputMap"     usage="samplespostable" ishidden="true"/>
 
     <!-- MATRICES -->
     <uniform name="worldMatrix"                 semantic="world"/>
