@@ -173,5 +173,5 @@ void main()
 	vec3 finalColor = contrib0 + contrib1 + contribE + emissiveContrib;
 
 	// Final Color
-	gl_FragColor = vec4(linear_to_gamma3(finalColor), texture2D(opacityMap,uv).r);
+	gl_FragColor = vec4(finalColor, texture2D(opacityMap,uv).r);
 }
